@@ -1,0 +1,18 @@
+-- View all appointments
+SELECT a.appointment_id, p.name AS patient, d.name AS doctor, a.appointment_date, a.issue
+FROM appointments a
+JOIN patients p ON a.patient_id = p.patient_id
+JOIN doctors d ON a.doctor_id = d.doctor_id;
+
+-- Patients assigned to a particular doctor
+SELECT p.name, d.name AS doctor
+FROM appointments a
+JOIN patients p ON a.patient_id = p.patient_id
+JOIN doctors d ON a.doctor_id = d.doctor_id
+WHERE d.name = 'Dr. Ramesh Kumar';
+
+-- Total number of appointments per doctor
+SELECT d.name, COUNT(*) AS total_appointments
+FROM appointments a
+JOIN doctors d ON a.doctor_id = d.doctor_id
+GROUP BY d.name;
