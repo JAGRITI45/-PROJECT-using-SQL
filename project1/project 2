@@ -1,0 +1,74 @@
+--CREATE DATABASE AND TABLE
+CREATE DATABASE course_registration;
+USE course_registration;
+
+-- Students Table
+CREATE TABLE students (
+    student_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    branch VARCHAR(50)
+);
+
+-- Courses Table
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY AUTO_INCREMENT,
+    course_name VARCHAR(100),
+    instructor VARCHAR(100),
+    credits INT
+);
+
+-- Enrollment Table
+CREATE TABLE enrollments (
+    enrollment_id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT,
+    course_id INT,
+    enrollment_date DATE,
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+-- INSERT SIMPLE VALUES
+-- Insert Students
+INSERT INTO students (name, email, branch) VALUES
+('Riya Sharma', 'riya@gmail.com', 'CSE'),
+('Aman Verma', 'aman@gmail.com', 'ECE');
+
+-- Insert Courses
+INSERT INTO courses (course_name, instructor, credits) VALUES
+('Database Management System', 'Dr. Arjun Rao', 4),
+('Object Oriented Programming', 'Prof. Sneha Mehta', 3),
+('Web Development Basics', 'Ms. Kavya Singh', 2);
+
+-- Insert Enrollments
+INSERT INTO enrollments (student_id, course_id, enrollment_date) VALUES
+(1, 1, '2024-06-01'),
+(1, 2, '2024-06-02'),
+(2, 3, '2024-06-03');
+
+-- SOME QUERIES
+-- View All Enrollments with Names
+SELECT 
+    e.enrollment_id,
+    s.name AS student_name,
+    c.course_name,
+    c.instructor,
+    e.enrollment_date
+FROM enrollments e
+JOIN students s ON e.student_id = s.student_id
+JOIN courses c ON e.course_id = c.course_id;
+
+-- Show Courses Taken by a Particular Student
+SELECT 
+    s.name, c.course_name
+FROM enrollments e
+JOIN students s ON e.student_id = s.student_id
+JOIN courses c ON e.course_id = c.course_id
+WHERE s.name = 'Riya Sharma';
+
+-- Count of Students per Course
+SELECT 
+    c.course_name, COUNT(e.student_id) AS total_students
+FROM enrollments e
+JOIN courses c ON e.course_id = c.course_id
+GROUP BY c.course_name;
