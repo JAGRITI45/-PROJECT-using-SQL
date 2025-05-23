@@ -1,0 +1,88 @@
+-- CREATE DATABASE AND TABLES
+CREATE DATABASE movie_booking;
+USE movie_booking;
+
+-- Movies Table
+CREATE TABLE movies (
+    movie_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100),
+    genre VARCHAR(50),
+    duration INT -- in minutes
+);
+
+-- Shows Table
+CREATE TABLE shows (
+    show_id INT PRIMARY KEY AUTO_INCREMENT,
+    movie_id INT,
+    show_time DATETIME,
+    total_seats INT,
+    available_seats INT,
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
+);
+
+-- Users Table
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100)
+);
+
+-- Bookings Table
+CREATE TABLE bookings (
+    booking_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    show_id INT,
+    seats_booked INT,
+    booking_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (show_id) REFERENCES shows(show_id)
+);
+
+-- INSERT SOME VALUES
+-- Movies
+INSERT INTO movies (title, genre, duration) VALUES
+('Inception', 'Sci-Fi', 148),
+('3 Idiots', 'Drama', 170),
+('Avengers: Endgame', 'Action', 181);
+
+-- Shows
+INSERT INTO shows (movie_id, show_time, total_seats, available_seats) VALUES
+(1, '2024-06-01 18:00:00', 100, 100),
+(2, '2024-06-01 21:00:00', 120, 120),
+(3, '2024-06-02 19:30:00', 150, 150);
+
+-- Users
+INSERT INTO users (name, email) VALUES
+('Riya Sharma', 'riya@gmail.com'),
+('Aman Verma', 'aman@gmail.com');
+
+-- Bookings
+INSERT INTO bookings (user_id, show_id, seats_booked) VALUES
+(1, 1, 2),
+(2, 2, 4);
+
+-- QUERIES
+-- Show all bookings with user and movie info
+SELECT 
+    b.booking_id,
+    u.name AS user,
+    m.title AS movie,
+    s.show_time,
+    b.seats_booked
+FROM bookings b
+JOIN users u ON b.user_id = u.user_id
+JOIN shows s ON b.show_id = s.show_id
+JOIN movies m ON s.movie_id = m.movie_id;
+
+-- Available seats for each show
+SELECT 
+    s.show_id, m.title, s.show_time, s.available_seats
+FROM shows s
+JOIN movies m ON s.movie_id = m.movie_id;
+
+-- Total bookings per user
+SELECT 
+    u.name, COUNT(b.booking_id) AS total_bookings
+FROM bookings b
+JOIN users u ON b.user_id = u.user_id
+GROUP BY u.name;
