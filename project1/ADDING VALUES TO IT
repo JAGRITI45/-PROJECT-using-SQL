@@ -1,0 +1,17 @@
+-- Doctors
+INSERT INTO doctors (name, specialization, phone)
+VALUES 
+('Dr. Ramesh Kumar', 'Cardiology', '9876543210'),
+('Dr. Aarti Mehta', 'Pediatrics', '9123456780');
+
+-- Patients
+INSERT INTO patients (name, gender, age, phone)
+VALUES 
+('Rahul Verma', 'Male', 45, '9812345678'),
+('Sneha Sharma', 'Female', 32, '9911223344');
+
+-- Appointments
+INSERT INTO appointments (patient_id, doctor_id, appointment_date, issue)
+VALUES 
+(1, 1, '2024-05-15', 'Chest Pain'),
+(2, 2, '2024-05-16', 'Fever & Cold');
